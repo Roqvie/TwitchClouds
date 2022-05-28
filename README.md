@@ -2,7 +2,7 @@
 
 Instrument for creating word clouds of Twitch:
 - Active chatters
-- Most used messages
+- Most used words in messages
 
 ### Features
 
