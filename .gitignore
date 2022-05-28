@@ -1,0 +1,20 @@
+# JetBrains PyCharm Editor configs and etc
+.idea
+.git
+
+# Virtualenv
+venv
+
+
+# Pictures
+/*.png
+/*.jpg
+/*.jpeg
+/*.webp
+
+# Fonts
+/*.ttf
+/*.otf
+
+__pycache__/
+*.py[cod]
