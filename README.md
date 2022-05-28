@@ -1,5 +1,10 @@
 # TwitchClouds
 
+<div align="left">
+    <img src="https://img.shields.io/github/downloads/Roqvie/TwitchClouds/total" />
+    <img src="https://img.shields.io/github/commit-activity/m/Roqvie/TwitchClouds" />
+</div>
+
 Instrument for creating word clouds of Twitch:
 - Active chatters
 - Most used words in messages
