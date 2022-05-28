@@ -3,6 +3,7 @@
 <div align="left">
     <img src="https://img.shields.io/github/downloads/Roqvie/TwitchClouds/total" />
     <img src="https://img.shields.io/github/commit-activity/m/Roqvie/TwitchClouds" />
+    <img src="https://img.shields.io/github/issues/Roqvie/TwitchClouds" />
 </div>
 
 Instrument for creating word clouds of Twitch:
