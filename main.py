@@ -29,25 +29,36 @@ exclude_users = ['moobot', ]
 exclude_words = twitch_emojis + channel_emojis + global_bttv + global_ffz + channel_bttv + channel_ffz
 
 users_activity: list = []
+users_set: set = set()
 words_activity: list = []
 for i, log in enumerate(chat_history):
     print(f'\rCollecting words and users form chat history{"."*(i%3+1)}{" "*(3-i%3+1)}', end='')
+    start_number_of_messages = len(users_activity)
+    start_number_of_words = len(words_activity)
+    start_number_of_users = len(users_set)
     user, message = log
     if user.nickname not in exclude_users:
+        users_set.add(user.nickname)
         users_activity.append(user.display_nickname)
     words_activity += list(set(message.text.split()).difference(set(exclude_words)))
-print(f"\nCollected:\n"
-      f" users - {len(users_activity)}\n"
-      f" words - {len(words_activity)}\n")
+    print(f"\nCollected:\n"
+          f" users messages - {len(users_activity)-start_number_of_messages}\n"
+          f" words - {len(words_activity)-start_number_of_words}\n"
+          f" active users - {len(users_set)-start_number_of_users}")
+
+print(f"\nTotal collected statistics:\n"
+      f" users messages - {len(users_activity)}\n"
+      f" words - {len(words_activity)}\n"
+      f" active users - {len(users_set)}\n")
 
 assert len(users_activity) > 0, '\n\nError! No users were found. Try another VOD(s).'
 assert len(words_activity) > 0, '\n\nError! No messages were found. Try another VOD(s).'
 
 print("Generating word clouds...")
 wordcloud_users = WordClouds.ColoredCloud(' '.join(users_activity), image=Image.open(BASE_FILE),
-                                          font='examples/arial.ttf', max_font_size=100)
+                                          font='examples/arial.ttf', max_font_size=50)
 wordcloud_words = WordClouds.ColoredCloud(' '.join(words_activity), image=Image.open(BASE_FILE),
-                                          font='examples/arial.ttf', max_font_size=100)
+                                          font='examples/arial.ttf', max_font_size=50)
 
 print("Saving word clouds as files...")
 wordcloud_users.as_png(f'{OUTPUT_FILENAME}-users')
