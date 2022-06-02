@@ -1,12 +1,12 @@
 # TwitchClouds
 
-<div align="left">
+<div align="center">
     <img src="https://img.shields.io/github/downloads/Roqvie/TwitchClouds/total" />
     <img src="https://img.shields.io/github/commit-activity/m/Roqvie/TwitchClouds" />
     <img src="https://img.shields.io/github/issues/Roqvie/TwitchClouds" />
 </div>
 
-Instrument for creating word clouds of Twitch:
+Instrument for creating Twitch word clouds:
 - Active chatters
 - Most used words in messages
 
@@ -16,57 +16,41 @@ Instrument for creating word clouds of Twitch:
 - BTTV, FFZ, Twitch emoji support for exculding from wordclouds
 - Working with images with PIL
 
-
-### Installing　(Python 3.10 on Ubuntu)
+### Installing　(Python 3.8+ on Ubuntu/Windows)
+Download package and install requirements
 ```bash
+git clone https://github.com/Roqvie/TwitchClouds.git
+cd TwitchClouds
 python -m venv venv
-venv/bin/activate
-python -m pip install - r requirements.txt
+venv/bin/activate   # or venv/Scripts/activate for Windows
+pip install -r requirements.txt
 ```
 
-### Example　
-
-```python
-import twitch
-from PIL import Image
-
-from TwitchClouds.Clouds import WordClouds
-from TwitchClouds.Twitch import TwitchBot, Emojis, ThirdpartyEmojis
-
-
-# Initialize bot for parsing messages
-helix = twitch.Helix('<api-secret>')
-bot = TwitchBot.Client(app_api=helix, user_api=('<client-id>', '<client-secret>'))
-
-channel = helix.user('<tiwth-streaner-nickname>')
-vods = bot.get_vods(user=channel)
-chat_history = bot.get_chat_logs(videos=vods, log_status=True)
-
-# Getting all emojis for excluding in word cloud
-twitch_emojis = Emojis.GlobalEmojis(auth=bot.auth).as_names()
-channel_emojis = Emojis.ChannelEmojis(auth=bot.auth, channel='<tiwth-streaner-nickname>').as_names()
-global_bttv = ThirdpartyEmojis.GlobalBTTV().as_names()
-channel_bttv = ThirdpartyEmojis.BTTV(auth=bot.auth, channel='<tiwth-streaner-nickname>').as_names()
-global_ffz = ThirdpartyEmojis.GlobalFFZ().as_names()
-channel_ffz = ThirdpartyEmojis.FFZ(auth=bot.auth, channel='<tiwth-streaner-nickname>').as_names()
-
-# Getting user nicknames and messages text for word clouds
-exclude_users = ['moobot']
-exclude_words = twitch_emojis + channel_emojis + global_bttv + global_ffz + channel_bttv + channel_ffz
-
-users_activity: list = []
-words_activity: list = []
-for user, message in chat_history:
-    if user.nickname not in exclude_users:
-        users_activity.append(user.display_nickname)
-    words_activity += list(set(message.text.split()).difference(set(exclude_words)))
-
-wordcloud_users = WordClouds.ColoredCloud(' '.join(users_activity), image=Image.open('examples/base.png'), font='examples/arial.ttf', max_font_size=50)
-wordcloud_words = WordClouds.ColoredCloud(' '.join(words_activity), image=Image.open('examples/base.png'), font='examples/arial.ttf', max_font_size=50)
-
-wordcloud_users.as_png('generated/', 'users')
-wordcloud_words.as_png('generated/', 'words')
+### Testing
+1. Set major `.env` variables for testing
+2. Test:
+```bash
+venv/bin/activate   # or venv/Scripts/activate for Windows
+python -m pytest
 ```
+![Example](https://raw.githubusercontent.com/Roqvie/TwitchClouds/dev/examples/test_preview.png)
+### Example with `main.py`
 
-### Example image
+1. Retrieve Client-Id and Client-Secret from [Twitch Apps](https://dev.twitch.tv/console/apps)
+   1. Write Client-Id in `.env` file as APP_CLIENT_ID 
+   2. Write Client-Secret in `.env` file as APP_CLIENT_SECRET 
+2. Retrieve user Access-Token from [Twitchtokengenerator](https://twitchtokengenerator.com/)
+   1. Write ACCESS TOKEN in `.env` file as USER_ACCESS_TOKEN 
+   2. Write CLIENT ID in `.env` file as USER_CLIENT_ID
+3. Select your broadcaster 
+   1. Write his username in `.env` file as BROADCASTER
+4. Write your filenames in `.env` file as BASE_FILE (with .extension) and OUTPUT_FILE (without .extension)
+5. Run script:
+```bash
+python main.py
+```
+![Example](https://raw.githubusercontent.com/Roqvie/TwitchClouds/dev/examples/main_preview.png)
+Output:
+
+### Generated with `main.py`
 ![JesusAVGN](https://raw.githubusercontent.com/Roqvie/TwitchClouds/master/generated/hesus-users1.png)

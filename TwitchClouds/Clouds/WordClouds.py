@@ -28,7 +28,7 @@ class ColoredCloud:
             min_word_length=2
         ).generate(self._words)
 
-        self.wordcloud.recolor(self._image_colors)
+        self.wordcloud.recolor(color_func=self._image_colors)
 
-    def as_png(self, filename: typing.Union[str], path: typing.Union[str] = None):
-        return self.wordcloud.to_file(f'{path}{filename}.png')
+    def as_png(self, path: typing.Union[str] = None):
+        return self.wordcloud.to_file(f'{path}.png')
