@@ -60,6 +60,7 @@ class Client:
         self._client_id = app_api.api.client_id
         self._client_secret = app_api.api.client_secret
         self._helix = app_api
+        # Auth Headers
         self.auth = {
             'Authorization': f'Bearer {user_api[1]}',
             'Client-Id': f'{user_api[0]}'
@@ -75,7 +76,7 @@ class Client:
         vods = []
 
         if date is None and start == datetime.date.min and end == datetime.date.max:
-            return list(user.videos())[0]
+            return list(user.videos())
 
         for video in user.videos():
             created_at_str = video.created_at.replace('T', '|').replace('Z', '')
@@ -90,15 +91,16 @@ class Client:
     def get_chat_logs(
             self,
             videos: typing.List[twitch.helix.Video],
-            log_status=False
     ) -> typing.List[typing.Tuple[User, Message]]:
         """ Retrieving chat history of any stream"""
         logs = []
 
-        for video in videos:
+        for number, video in enumerate(videos):
+            start_number_of_messages = len(logs)
+
             for i, comment in enumerate(self._helix.video(video.id).comments):
-                if log_status:
-                    print(f'[Video: {video.title}] Collecting vod comment №{i}{"."*(i%3+1)}')
+                print(f'\r[{number+1}/{len(videos)}] Video("{video.title}", {video.url}): Collecting vod comment №{i}{"."*(i%3+1)}{" "*(3-i%3+1)}', end='')
+
                 created_at_str = comment.created_at.replace('T', '|').replace('Z', '')
                 try:
                     created_at = datetime.datetime.strptime(created_at_str, '%Y-%m-%d|%H:%M:%S.%f').date()
@@ -117,5 +119,8 @@ class Client:
                         timestamp=created_at
                     ),
                 ))
+            print(f"\nCollected:\n"
+                  f" from this VOD - {len(logs) - start_number_of_messages} messages\n"
+                  f" total - {len(logs)} messages")
 
         return logs

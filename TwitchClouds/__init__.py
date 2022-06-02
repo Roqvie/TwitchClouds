@@ -10,3 +10,5 @@ __all__ = [
     BttvAPI,
     FfzAPI
 ]
+
+__package__ = "TwitchClouds"
