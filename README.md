@@ -49,8 +49,9 @@ python -m pytest
 ```bash
 python main.py
 ```
-![Example](https://raw.githubusercontent.com/Roqvie/TwitchClouds/dev/examples/main_preview.png)
 Output:
+![Example](https://raw.githubusercontent.com/Roqvie/TwitchClouds/dev/examples/main_preview.png)
+
 
 ### Generated with `main.py`
 ![JesusAVGN](https://raw.githubusercontent.com/Roqvie/TwitchClouds/master/generated/hesus-users1.png)
